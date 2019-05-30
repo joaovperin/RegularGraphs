@@ -1,5 +1,6 @@
 const CanvasWidth = 1600;
 const CanvasHeight = 1200;
+const CanvasColor = 'FFF';
 
 const VertexRadius = 30;
 
@@ -31,6 +32,18 @@ function appOnLoad() {
    ctx = canvas.getContext('2d');
    console.log(ctx);
 
+   randomizeAndDraw();
+}
+
+/**
+ * Randomize graph and draw it on screen
+ */ 
+function randomizeAndDraw(){
+
+   // Clear the canvas	
+   clearCanvas();
+	
+   // Gets initial X and Y for the center
    let startX = CanvasWidth / 2,
       startY = VertexInitialOffset + VertexRadius;
 
@@ -48,6 +61,14 @@ function appOnLoad() {
 
    // Draw the graph, starting by root node
    drawGraph(root);
+}
+
+/**
+ * Clear canvas
+ */ 
+function clearCanvas(){
+   ctx.fillStyle = CanvasColor;
+   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 /**
