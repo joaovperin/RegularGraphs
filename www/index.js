@@ -4,8 +4,8 @@ const CanvasHeight = 1200;
 const VertexLineWidth = 4;
 const VertexColor = '#000';
 const VertexFillColor = '#F00';
-const VertexRadius = 50;
-const VertexOffset = 60;
+const VertexRadius = 20;
+const VertexOffset = 10;
 const VertexInitialOffset = 25;
 
 const EdgeColor = '#0F0';
@@ -28,10 +28,13 @@ function appOnLoad() {
 
    let root = new Vertex(startX, startY);
    let c = root;
-   for (let i = 0; i < 3; i++) {
-      c.leftChild = c.createLeftChild();;
-      c.rightChild = c.createRightChild();;
-      c = c.leftChild;
+   for (let i = 0; i < 20; i++) {
+      let go = (~~((Math.random() * 100) % 2));
+      if (go)
+         c.leftChild = c.createLeftChild();
+      else
+         c.rightChild = c.createRightChild();
+      c = !go ? c.rightChild : c.leftChild;
    }
 
    drawGraph(root);
@@ -93,7 +96,7 @@ class Vertex {
 
    }
    createRightChild() {
-      let pX = this.x + this.x / 2,
+      let pX = this.x + (CanvasWidth - this.x) / 2,
          pY = this.y + VertexOffset + 2 * VertexRadius;
       return new Vertex(pX, pY);
    }
