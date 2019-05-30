@@ -1,12 +1,16 @@
 const CanvasWidth = 1600;
 const CanvasHeight = 1200;
 
+const VertexRadius = 30;
+
 const VertexLineWidth = 4;
+const VertexInitialOffset = 25;
 const VertexColor = '#000';
 const VertexFillColor = '#F00';
-const VertexRadius = 20;
-const VertexOffset = 10;
-const VertexInitialOffset = 25;
+
+const VertexFontSize = VertexRadius - VertexRadius/10;
+const VertexFont = VertexFontSize + 'px Arial';
+const VertexOffset = 15 + VertexRadius / 6;
 
 const VertexValueColor = '#000';
 
@@ -22,6 +26,7 @@ var ctx;
  */
 function appOnLoad() {
 
+   // Get a reference to canvas and context
    canvas = document.getElementById('canvas');
    ctx = canvas.getContext('2d');
    console.log(ctx);
@@ -30,9 +35,9 @@ function appOnLoad() {
       startY = VertexInitialOffset + VertexRadius;
 
    // Some randomness, just for fun (and tests) :D
-   let root = new Vertex(startX, startY);
+   let root = new Vertex(startX, startY, {x: CanvasWidth, y: CanvasHeight});
    let c = root;
-   for (let i = 0; i < 20; i++) {
+   for (let i = 0; i < 8; i++) {
       let go = (~~((Math.random() * 100) % 2));
       if (go)
          c.leftChild = c.createLeftChild();
@@ -86,22 +91,24 @@ function drawEdge(me, son) {
  */
 class Vertex {
 
-   x;
-   y;
+   x; y;
    value;
 
    valueOffsetX;
    valueOffsetY;
 
+   parentVertex;
    leftChild;
    rightChild;
 
-   constructor(x, y) {
+   constructor(x, y, parentVertex) {
+      this.parentVertex = parentVertex;
       this.x = x;
       this.y = y;
       this.value = ~~(Math.random() * 100);
-      this.valueOffsetX = 5 * this.value.toString().length;
-      this.valueOffsetY = 7;
+      let vSize = this.value.toString().length;
+      this.valueOffsetX = VertexRadius / 7.5 + vSize * (VertexRadius / 6.5);
+      this.valueOffsetY = ((VertexRadius + 3) / 4);
    }
 
    /**
@@ -110,16 +117,16 @@ class Vertex {
    createLeftChild() {
       let pX = this.x / 2,
          pY = this.y + VertexOffset + 2 * VertexRadius;
-      return new Vertex(pX, pY);
+      return new Vertex(pX, pY, this);
    }
 
    /**
     * Creates a child to the right
     */
    createRightChild() {
-      let pX = this.x + (CanvasWidth - this.x) / 2,
+      let pX = this.x + (this.parentVertex.x - this.x) / 2,
          pY = this.y + VertexOffset + 2 * VertexRadius;
-      return new Vertex(pX, pY);
+      return new Vertex(pX, pY, this);
    }
 
    /**
@@ -139,7 +146,7 @@ class Vertex {
 
       // Value inside
       ctx.fillStyle = VertexValueColor;
-      ctx.font = "20px Arial";
+      ctx.font = VertexFont;
       ctx.beginPath();
       ctx.fillText(this.value, this.x - this.valueOffsetX, this.y + this.valueOffsetY);
       ctx.closePath();
