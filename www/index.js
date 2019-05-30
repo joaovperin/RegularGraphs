@@ -49,7 +49,6 @@ function appOnLoad() {
 function drawGraph(rootNode) {
    let left = rootNode.leftChild,
       right = rootNode.rightChild;
-   // debugger;
    if (left) {
       drawEdge(rootNode, left);
       drawGraph(left);
@@ -98,6 +97,7 @@ class Vertex {
 
       ctx.beginPath();
       ctx.arc(this.x, this.y, VertexRadius, 0, 2 * Math.PI);
+      ctx.closePath();
       ctx.stroke();
       ctx.fill();
    }
