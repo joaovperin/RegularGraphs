@@ -23,20 +23,16 @@ function appOnLoad() {
    ctx = canvas.getContext('2d');
    console.log(ctx);
 
-   let pX, pY;
-
    let startX = CanvasWidth / 2,
       startY = VertexInitialOffset + VertexRadius;
 
    let root = new Vertex(startX, startY);
-
-   pX = root.x / 2,
-      pY = root.y + VertexOffset + 2 * VertexRadius;
-   root.leftChild = new Vertex(pX, pY);
-
-   pX = root.x + root.x / 2,
-      pY = root.y + VertexOffset + 2 * VertexRadius;
-   root.rightChild = new Vertex(pX, pY);
+   let c = root;
+   for (let i = 0; i < 3; i++) {
+      c.leftChild = c.createLeftChild();;
+      c.rightChild = c.createRightChild();;
+      c = c.leftChild;
+   }
 
    drawGraph(root);
 }
@@ -88,6 +84,18 @@ class Vertex {
    constructor(x, y) {
       this.x = x;
       this.y = y;
+   }
+
+   createLeftChild() {
+      let pX = this.x / 2,
+         pY = this.y + VertexOffset + 2 * VertexRadius;
+      return new Vertex(pX, pY);
+
+   }
+   createRightChild() {
+      let pX = this.x + this.x / 2,
+         pY = this.y + VertexOffset + 2 * VertexRadius;
+      return new Vertex(pX, pY);
    }
 
    draw() {
