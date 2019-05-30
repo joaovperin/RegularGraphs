@@ -24,7 +24,8 @@ function createWindow() {
     width: PREFS.windowWidth,
     height: PREFS.windowHeight,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: false,
+      sandbox: true
     }
   })
 

@@ -7,7 +7,7 @@
   "private": false,
   "main": "main.js",
   "scripts": {
-    "start":"electron ."
+    "start": "electron ."
   },
   "dependencies": {
     "electron": "^5.0.2"
