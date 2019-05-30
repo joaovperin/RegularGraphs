@@ -1,0 +1,9 @@
+{
+  "name": "RegularGraphs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/joaovperin/RegularGraphs.git",
+  "author": "João Perin <joaovperin@live.com>",
+  "license": "GPL3",
+  "private": false
+}
