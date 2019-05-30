@@ -11,7 +11,8 @@ const VertexFillColor = '#F00';
 
 const VertexFontSize = VertexRadius - VertexRadius/10;
 const VertexFont = VertexFontSize + 'px Arial';
-const VertexOffset = 15 + VertexRadius / 6;
+const VertexOffsetY = 15 + VertexRadius / 6;
+const VertexOffsetX = 5 + VertexRadius;
 
 const VertexValueColor = '#000';
 
@@ -49,7 +50,11 @@ function randomizeAndDraw(){
 
    // Some randomness, just for fun (and tests) :D
    let root = new Vertex(startX, startY, {x: CanvasWidth, y: CanvasHeight});
-   let c = root;
+   root.leftChild = root.createLeftChild();
+   root.rightChild = root.createRightChild();
+   generateRandomGraph(root.leftChild);
+   generateRandomGraph(root.rightChild);
+/*   let c = root;
    for (let i = 0; i < 8; i++) {
       let go = (~~((Math.random() * 100) % 2));
       if (go)
@@ -58,13 +63,38 @@ function randomizeAndDraw(){
          c.rightChild = c.createRightChild();
       c = !go ? c.rightChild : c.leftChild;
    }
-
+*/
    // Draw the graph, starting by root node
    drawGraph(root);
 }
 
 /**
- * Clear canvas
+ * Generates a new random graph
+ */
+function generateRandomGraph(root){
+   // Exit conditions
+   if (!root || 
+      (root.y + VertexRadius) >= CanvasHeight ||
+      (root.x - VertexRadius) <= 0 || 
+      (root.x + VertexRadius) >= CanvasWidth
+   ) return;
+   // Determinate a direction to grow
+   let side = (~~((Math.random() * 100) % 4));
+   if (side === 1){ // Left
+      root.leftChild = root.createLeftChild();
+   } else if (side === 2){ // Right
+      root.rightChild = root.createRightChild();
+   } else if (side === 3) { // Both
+      root.leftChild = root.createLeftChild();
+      root.rightChild = root.createRightChild();
+   }
+   // Make it recursively
+   generateRandomGraph(root.leftChild);
+   generateRandomGraph(root.rightChild);
+}
+
+/**
+ * Clear the canvas
  */ 
 function clearCanvas(){
    ctx.fillStyle = CanvasColor;
@@ -136,8 +166,8 @@ class Vertex {
     * Creates a child to the left
     */
    createLeftChild() {
-      let pX = this.x / 2,
-         pY = this.y + VertexOffset + 2 * VertexRadius;
+      let pX = this.x - (this.parentVertex.x - this.x) / 2 - VertexOffsetX ,
+         pY = this.y + VertexOffsetY + 2 * VertexRadius;
       return new Vertex(pX, pY, this);
    }
 
@@ -145,8 +175,8 @@ class Vertex {
     * Creates a child to the right
     */
    createRightChild() {
-      let pX = this.x + (this.parentVertex.x - this.x) / 2,
-         pY = this.y + VertexOffset + 2 * VertexRadius;
+      let pX = this.x + (this.parentVertex.x - this.x) / 2 + VertexOffsetX,
+         pY = this.y + VertexOffsetY + 2 * VertexRadius;
       return new Vertex(pX, pY, this);
    }
 
