@@ -1,81 +1,62 @@
-const CanvasWidth = 1920;
-const CanvasHeight = 1080;
+const CanvasWidth = 1600;
+const CanvasHeight = 1200;
 
-const VertexColor = '#F00';
-const VertexSize = 80;
-const VertexRadius = VertexSize / 2;
-const InitialVertexOffset = 25;
+const VertexColor = '#000';
+const VertexFillColor = '#F00';
+const VertexRadius = 50;
 const VertexOffset = 60;
-
-const ArestaColor = '#0F0';
-
+const VertexInitialOffset = 25;
 
 var canvas;
 var ctx;
 
+/**
+ * Runs when the browser loads
+ */
 function appOnLoad() {
 
    canvas = document.getElementById('canvas');
    ctx = canvas.getContext('2d');
    console.log(ctx);
 
-   let centerX = CanvasWidth / 2;
-   let posX = centerX - VertexRadius;
-   let posY = 0 + InitialVertexOffset;
+   let startX = CanvasWidth / 2,
+      startY = VertexInitialOffset + VertexRadius;
 
-   let root = new Vertex(posX, posY);
-
-   let v1 = new Vertex(centerX / 2 - VertexRadius, posY + VertexSize + VertexOffset);
-
-   root.setNext(v1);
+   let root = new Vertex(startX, startY);
    drawGraph(root);
 }
 
-function drawGraph(initialVertex) {
-   let c = initialVertex;
-   //debugger;
-   while (c) {
-      ctx.fillStyle = VertexColor;
-      ctx.fillRect(c.x, c.y, VertexSize, VertexSize);
-
-      // TODO: fill circles  ctx.fillStyle = 'black'; ctx.arc(50, 50, 80, 0, 2*Math.PI);
-
-
-      if (c.next) {
-         let n = c.next;
-         ctx.fillStyle = ArestaColor;
-         ctx.lineWidth = 1;
-
-         let sY = (c.y + VertexSize),
-            sX = c.x > n.x ? c.x : c.x + VertexSize;
-         let fY = n.y,
-            fX = n.x > c.x ? n.x : n.x + VertexSize;
-
-         ctx.moveTo(sX, sY);
-         ctx.lineTo(fX, fY);
-         ctx.closePath();
-         ctx.stroke();
-      }
-      c = c.next;
-   }
+/**
+ * Draw a graph
+ *
+ * @param {Vertex} rootNode
+ */
+function drawGraph(rootNode) {
+   let c = rootNode;
+   c.draw();
 }
 
 class Vertex {
 
    x;
    y;
-   value;
 
-   next;
+   leftChild;
+   rightChild;
 
    constructor(x, y) {
       this.x = x;
       this.y = y;
    }
 
-   setNext(next) {
-      this.next = next;
-      return this.next;
+   draw() {
+      ctx.strokeStyle = VertexColor;
+      ctx.fillStyle = VertexFillColor;
+
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, VertexRadius, 0, 2 * Math.PI);
+      ctx.stroke();
+      ctx.fill();
    }
 
 }
