@@ -1,6 +1,14 @@
+const CanvasWidth = 1920;
+const CanvasHeight = 1080;
+
 const VertexColor = '#F00';
-const VertexSize = 20;
+const VertexSize = 80;
+const VertexRadius = VertexSize / 2;
+const InitialVertexOffset = 25;
+const VertexOffset = 60;
+
 const ArestaColor = '#0F0';
+
 
 var canvas;
 var ctx;
@@ -11,15 +19,16 @@ function appOnLoad() {
    ctx = canvas.getContext('2d');
    console.log(ctx);
 
-   let g1 = new Vertex(100, 20);
-   let g2 = new Vertex(150, 90);
-   let g3 = new Vertex(55, 90);
+   let centerX = CanvasWidth / 2;
+   let posX = centerX - VertexRadius;
+   let posY = 0 + InitialVertexOffset;
 
-   g1.setNext(g2).setNext(g3);
-   // g1.setNext(g2).setNext(g3);
+   let root = new Vertex(posX, posY);
 
-   drawGraph(g1);
+   let v1 = new Vertex(centerX / 2 - VertexRadius, posY + VertexSize + VertexOffset);
 
+   root.setNext(v1);
+   drawGraph(root);
 }
 
 function drawGraph(initialVertex) {
