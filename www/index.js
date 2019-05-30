@@ -1,5 +1,5 @@
 const VertexColor = '#F00';
-const VertexSize = 30;
+const VertexSize = 20;
 const ArestaColor = '#0F0';
 
 var canvas;
@@ -11,19 +11,20 @@ function appOnLoad() {
    ctx = canvas.getContext('2d');
    console.log(ctx);
 
-   let g1 = new Vertex(40, 40);
+   let g1 = new Vertex(100, 20);
    let g2 = new Vertex(150, 90);
+   let g3 = new Vertex(55, 90);
 
-   g1.setNext(g2);
+   g1.setNext(g2).setNext(g3);
+   // g1.setNext(g2).setNext(g3);
 
    drawGraph(g1);
-   drawGraph(g2);
 
 }
 
 function drawGraph(initialVertex) {
    let c = initialVertex;
-   debugger;
+   //debugger;
    while (c) {
       ctx.fillStyle = VertexColor;
       ctx.fillRect(c.x, c.y, VertexSize, VertexSize);
@@ -33,10 +34,18 @@ function drawGraph(initialVertex) {
 
       if (c.next) {
          let n = c.next;
-         //ctx.lineWidth = 10;
          ctx.fillStyle = ArestaColor;
-         ctx.moveTo(c.x, c.y);
-         ctx.lineTo(n.x, n.y);
+         ctx.lineWidth = 1;
+
+         let sY = (c.y + VertexSize),
+            sX = c.x > n.x ? c.x : c.x + VertexSize;
+         let fY = n.y,
+            fX = n.x > c.x ? n.x : n.x + VertexSize;
+
+         ctx.moveTo(sX, sY);
+         ctx.lineTo(fX, fY);
+         ctx.closePath();
+         ctx.stroke();
       }
       c = c.next;
    }
@@ -56,7 +65,8 @@ class Vertex {
    }
 
    setNext(next) {
-      this.next = next
+      this.next = next;
+      return this.next;
    }
 
 }
