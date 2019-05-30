@@ -8,9 +8,12 @@ const VertexRadius = 20;
 const VertexOffset = 10;
 const VertexInitialOffset = 25;
 
+const VertexValueColor = '#000';
+
 const EdgeColor = '#0F0';
 const EdgeWidth = 4;
 
+// Canvas and RenderingContext
 var canvas;
 var ctx;
 
@@ -26,6 +29,7 @@ function appOnLoad() {
    let startX = CanvasWidth / 2,
       startY = VertexInitialOffset + VertexRadius;
 
+   // Some randomness, just for fun (and tests) :D
    let root = new Vertex(startX, startY);
    let c = root;
    for (let i = 0; i < 20; i++) {
@@ -37,6 +41,7 @@ function appOnLoad() {
       c = !go ? c.rightChild : c.leftChild;
    }
 
+   // Draw the graph, starting by root node
    drawGraph(root);
 }
 
@@ -76,10 +81,17 @@ function drawEdge(me, son) {
    ctx.stroke();
 }
 
+/**
+ * A vertex
+ */
 class Vertex {
 
    x;
    y;
+   value;
+
+   valueOffsetX;
+   valueOffsetY;
 
    leftChild;
    rightChild;
@@ -87,29 +99,50 @@ class Vertex {
    constructor(x, y) {
       this.x = x;
       this.y = y;
+      this.value = ~~(Math.random() * 100);
+      this.valueOffsetX = 5 * this.value.toString().length;
+      this.valueOffsetY = 7;
    }
 
+   /**
+    * Creates a child to the left
+    */
    createLeftChild() {
       let pX = this.x / 2,
          pY = this.y + VertexOffset + 2 * VertexRadius;
       return new Vertex(pX, pY);
-
    }
+
+   /**
+    * Creates a child to the right
+    */
    createRightChild() {
       let pX = this.x + (CanvasWidth - this.x) / 2,
          pY = this.y + VertexOffset + 2 * VertexRadius;
       return new Vertex(pX, pY);
    }
 
+   /**
+    * Renders the Vertex itself on canvas
+    */
    draw() {
       ctx.strokeStyle = VertexColor;
       ctx.fillStyle = VertexFillColor;
       ctx.lineWidth = VertexLineWidth;
 
+      // Vertex circle
       ctx.beginPath();
       ctx.arc(this.x, this.y, VertexRadius, 0, 2 * Math.PI);
       ctx.closePath();
       ctx.stroke();
+      ctx.fill();
+
+      // Value inside
+      ctx.fillStyle = VertexValueColor;
+      ctx.font = "20px Arial";
+      ctx.beginPath();
+      ctx.fillText(this.value, this.x - this.valueOffsetX, this.y + this.valueOffsetY);
+      ctx.closePath();
       ctx.fill();
    }
 
