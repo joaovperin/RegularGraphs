@@ -102,24 +102,39 @@ function sortGraph() {
  */
 function generateRandomGraph(root) {
    // Exit conditions
-   if (!root ||
-      (root.y + VertexRadius) >= CanvasHeight ||
-      (root.x - VertexRadius) <= 0 ||
-      (root.x + VertexRadius) >= CanvasWidth
-   ) return;
+   if (!root || isVertexInvalid(root)) return;
    // Determinate a direction to grow
    let side = (~~((Math.random() * 100) % 4));
+   /**
+    * 1 = Left
+    * 2 = Right
+    * 3 = Both
+    */
+   let newLeftChild = root.createLeftChild();
+   if (isVertexInvalid(newLeftChild)) {
+      newLeftChild = null;
+   }
+   let newRightChild = root.createRightChild();
+   if (isVertexInvalid(newRightChild)) {
+      newRightChild = null;
+   }
    if (side === 1) { // Left
-      root.leftChild = root.createLeftChild();
+      root.leftChild = newLeftChild;
    } else if (side === 2) { // Right
-      root.rightChild = root.createRightChild();
+      root.rightChild = newRightChild;
    } else if (side === 3) { // Both
-      root.leftChild = root.createLeftChild();
-      root.rightChild = root.createRightChild();
+      root.leftChild = newLeftChild;
+      root.rightChild = newRightChild;
    }
    // Make it recursively
    generateRandomGraph(root.leftChild);
    generateRandomGraph(root.rightChild);
+}
+
+function isVertexInvalid(root) {
+   return (root.y + VertexRadius) >= CanvasHeight ||
+      (root.x - VertexRadius) <= 0 ||
+      (root.x + VertexRadius) >= CanvasWidth;
 }
 
 /**
