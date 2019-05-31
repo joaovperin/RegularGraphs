@@ -27,6 +27,8 @@ var ctx;
 
 // Current graph
 var graphRootNode;
+var graphValueArray;
+var currentValue;
 
 /**
  * Runs when the browser loads
@@ -37,6 +39,17 @@ function appOnLoad() {
    canvas = document.getElementById('canvas');
    ctx = canvas.getContext('2d');
    console.log(ctx);
+
+   const valueField = document.getElementById('value');
+   valueField.addEventListener("keypress", function (evt) {
+      var ch = String.fromCharCode(evt.which);
+      let isNumber = /[0-9]/.test(ch);
+      if (!isNumber) {
+         evt.preventDefault();
+      }
+      return isNumber;
+   });
+   valueField.addEventListener("keyup", (evt) => currentValue = evt.target.value || 0);
 
    randomizeAndDraw();
 }
@@ -81,7 +94,7 @@ function randomizeAndDraw() {
  * Sort function
  */
 function sortGraph() {
-   alert('Not implemented yet!');
+   //alert('Not implemented yet!');
 }
 
 /**
@@ -218,4 +231,12 @@ class Vertex {
       ctx.fill();
    }
 
+}
+
+/**
+ * Adds a value on the graph
+ */
+function addValueOnGraph() {
+   console.log('Value: ', value);
+   alert('Not implemented yet');
 }
