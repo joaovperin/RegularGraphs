@@ -1,3 +1,5 @@
+'use strict';
+
 const CanvasWidth = 1600;
 const CanvasHeight = 1200;
 const CanvasColor = 'FFF';
@@ -157,16 +159,12 @@ function drawEdge(me, son) {
  */
 class Vertex {
 
-   x;
-   y;
-   value;
-
-   valueOffsetX;
-   valueOffsetY;
-
-   parentVertex;
-   leftChild;
-   rightChild;
+   /*
+      x; y;  // position
+      value; // value
+      valueOffsetX; valueOffsetY; // offset for the text
+      parentVertex; leftChild; rightChild; // relationships
+   */
 
    constructor(x, y, parentVertex) {
       this.parentVertex = parentVertex;
