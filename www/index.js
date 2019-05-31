@@ -94,7 +94,11 @@ function randomizeAndDraw() {
  * Sort function
  */
 function sortGraph() {
-   //alert('Not implemented yet!');
+   if (isRunningOnApple()) {
+      alert('Oi Lari te amo <3');
+   } else {
+      alert('Not implemented yet!');
+   }
 }
 
 /**
@@ -254,4 +258,27 @@ class Vertex {
 function addValueOnGraph() {
    console.log('Value: ', value);
    alert('Not implemented yet');
+}
+
+function isRunningOnApple() {
+   let iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+   if (iOS) return true;
+   const iDevices = [
+      'iPad Simulator',
+      'iPhone Simulator',
+      'iPod Simulator',
+      'iPad',
+      'iPhone',
+      'iPod'
+   ];
+
+   if (!!navigator.platform) {
+      while (iDevices.length) {
+         if (navigator.platform === iDevices.pop()) {
+            return true;
+         }
+      }
+   }
+
+   return false;
 }
