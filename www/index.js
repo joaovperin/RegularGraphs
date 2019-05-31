@@ -23,6 +23,9 @@ const EdgeWidth = 4;
 var canvas;
 var ctx;
 
+// Current graph
+var graphRootNode;
+
 /**
  * Runs when the browser loads
  */
@@ -68,7 +71,15 @@ function randomizeAndDraw() {
       }
    */
    // Draw the graph, starting by root node
-   drawGraph(root);
+   graphRootNode = root;
+   drawGraph(graphRootNode);
+}
+
+/**
+ * Sort function
+ */
+function sortGraph() {
+   alert('Not implemented yet!');
 }
 
 /**
@@ -100,6 +111,7 @@ function generateRandomGraph(root) {
  * Clear the canvas
  */
 function clearCanvas() {
+   graphRootNode = null;
    ctx.fillStyle = CanvasColor;
    ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
