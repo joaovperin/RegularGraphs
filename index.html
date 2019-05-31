@@ -9,11 +9,18 @@
 </head>
 
 <body>
-   <div id="container">
+   <div class="container">
       <h1>Graphs</h1>
       <canvas width="1600" height="1200" id="canvas"></canvas>
-      <h1><pre id="reset-btn" onclick="randomizeAndDraw()">(Randomize)</pre></h1>
-      <h2><pre><a target="_blank" href="https://github.com/joaovperin/RegularGraphs">Github</a></pre></h2>
+      <div class="container">
+         <h1 class="pre-font">
+            <span class="app-button" onclick="clearCanvas()">(Clear)</span>
+            <span class="app-button" onclick="randomizeAndDraw()">(Randomize)</span>
+         </h1>
+      </div>
+      <h2 class="pre-font">
+         by <a target="_blank" href="https://github.com/joaovperin/RegularGraphs">joaovperin</a>
+      </h2>
    </div>
    <script>
       window.addEventListener('load', appOnLoad);

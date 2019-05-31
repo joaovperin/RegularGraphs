@@ -10,15 +10,19 @@ body {
     margin: auto;
 }
 
-#container {
+.container {
     text-align: center;
     margin: auto;
 }
 
-#reset-btn {
+.app-button {
     cursor: pointer;
 }
-#reset-btn:hover {
+
+.app-button:hover {
     color: blue;
 }
 
+.pre-font {
+    font-family: monospace;
+}

@@ -9,7 +9,7 @@ const VertexInitialOffset = 25;
 const VertexColor = '#000';
 const VertexFillColor = '#F00';
 
-const VertexFontSize = VertexRadius - VertexRadius/10;
+const VertexFontSize = VertexRadius - VertexRadius / 10;
 const VertexFont = VertexFontSize + 'px Arial';
 const VertexOffsetY = 15 + VertexRadius / 6;
 const VertexOffsetX = 5 + VertexRadius;
@@ -38,32 +38,35 @@ function appOnLoad() {
 
 /**
  * Randomize graph and draw it on screen
- */ 
-function randomizeAndDraw(){
+ */
+function randomizeAndDraw() {
 
-   // Clear the canvas	
+   // Clear the canvas
    clearCanvas();
-	
+
    // Gets initial X and Y for the center
    let startX = CanvasWidth / 2,
       startY = VertexInitialOffset + VertexRadius;
 
    // Some randomness, just for fun (and tests) :D
-   let root = new Vertex(startX, startY, {x: CanvasWidth, y: CanvasHeight});
+   let root = new Vertex(startX, startY, {
+      x: CanvasWidth,
+      y: CanvasHeight
+   });
    root.leftChild = root.createLeftChild();
    root.rightChild = root.createRightChild();
    generateRandomGraph(root.leftChild);
    generateRandomGraph(root.rightChild);
-/*   let c = root;
-   for (let i = 0; i < 8; i++) {
-      let go = (~~((Math.random() * 100) % 2));
-      if (go)
-         c.leftChild = c.createLeftChild();
-      else
-         c.rightChild = c.createRightChild();
-      c = !go ? c.rightChild : c.leftChild;
-   }
-*/
+   /*   let c = root;
+      for (let i = 0; i < 8; i++) {
+         let go = (~~((Math.random() * 100) % 2));
+         if (go)
+            c.leftChild = c.createLeftChild();
+         else
+            c.rightChild = c.createRightChild();
+         c = !go ? c.rightChild : c.leftChild;
+      }
+   */
    // Draw the graph, starting by root node
    drawGraph(root);
 }
@@ -71,18 +74,18 @@ function randomizeAndDraw(){
 /**
  * Generates a new random graph
  */
-function generateRandomGraph(root){
+function generateRandomGraph(root) {
    // Exit conditions
-   if (!root || 
+   if (!root ||
       (root.y + VertexRadius) >= CanvasHeight ||
-      (root.x - VertexRadius) <= 0 || 
+      (root.x - VertexRadius) <= 0 ||
       (root.x + VertexRadius) >= CanvasWidth
    ) return;
    // Determinate a direction to grow
    let side = (~~((Math.random() * 100) % 4));
-   if (side === 1){ // Left
+   if (side === 1) { // Left
       root.leftChild = root.createLeftChild();
-   } else if (side === 2){ // Right
+   } else if (side === 2) { // Right
       root.rightChild = root.createRightChild();
    } else if (side === 3) { // Both
       root.leftChild = root.createLeftChild();
@@ -95,8 +98,8 @@ function generateRandomGraph(root){
 
 /**
  * Clear the canvas
- */ 
-function clearCanvas(){
+ */
+function clearCanvas() {
    ctx.fillStyle = CanvasColor;
    ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
@@ -142,7 +145,8 @@ function drawEdge(me, son) {
  */
 class Vertex {
 
-   x; y;
+   x;
+   y;
    value;
 
    valueOffsetX;
@@ -166,7 +170,7 @@ class Vertex {
     * Creates a child to the left
     */
    createLeftChild() {
-      let pX = this.x - (this.parentVertex.x - this.x) / 2 - VertexOffsetX ,
+      let pX = this.x - (this.parentVertex.x - this.x) / 2 - VertexOffsetX,
          pY = this.y + VertexOffsetY + 2 * VertexRadius;
       return new Vertex(pX, pY, this);
    }
