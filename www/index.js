@@ -48,55 +48,6 @@ function appOnLoad() {
       }
       return isNumber;
    });
-
-   // randomizeAndDraw();
-}
-
-/**
- * Randomize graph and draw it on screen
- */
-function randomizeAndDraw() {
-
-   // Clear the canvas
-   clearCanvas();
-
-   // Gets initial X and Y for the center
-   let startX = CanvasWidth / 2,
-      startY = VertexInitialOffset + VertexRadius;
-
-   // Some randomness, just for fun (and tests) :D
-   let root = new Vertex(startX, startY, {
-      x: CanvasWidth,
-      y: CanvasHeight
-   });
-   root.leftChild = root.createLeftChild();
-   root.rightChild = root.createRightChild();
-   generateRandomGraph(root.leftChild);
-   generateRandomGraph(root.rightChild);
-   /*   let c = root;
-      for (let i = 0; i < 8; i++) {
-         let go = (~~((Math.random() * 100) % 2));
-         if (go)
-            c.leftChild = c.createLeftChild();
-         else
-            c.rightChild = c.createRightChild();
-         c = !go ? c.rightChild : c.leftChild;
-      }
-   */
-   // Draw the graph, starting by root node
-   graphRootNode = root;
-   drawGraph(graphRootNode);
-}
-
-/**
- * Sort function
- */
-function sortGraph() {
-   if (isRunningOnApple()) {
-      alert('Oi Lari te amo <3');
-   } else {
-      alert('Not implemented yet!');
-   }
 }
 
 /**
@@ -282,6 +233,7 @@ function /*private*/ createNewGraph(){
       y: CanvasHeight
    });
    graphRootNode.value = Number(valueField.value);
+   console.debug('Root -> ', graphRootNode.value);
 }
 
 /**
@@ -317,16 +269,8 @@ function /*private*/ addValueOnExistingGraph(){
          } else {
             r.rightChild = r.createRightChild();
             r.rightChild.value = currentValue;
-            console.debug('RIGHT -> ', currentValue)
+            console.debug('RIGHT -> ', currentValue);
          }
       }
    }
-}
-
-/**
- * Return true if it's running on an Apple device
- */
-function isRunningOnApple() {
-   let iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
-   return iOS;
 }
