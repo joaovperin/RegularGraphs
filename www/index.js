@@ -260,25 +260,10 @@ function addValueOnGraph() {
    alert('Not implemented yet');
 }
 
+/**
+ * Return true if it's running on an Apple device
+ */
 function isRunningOnApple() {
    let iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
-   if (iOS) return true;
-   const iDevices = [
-      'iPad Simulator',
-      'iPhone Simulator',
-      'iPod Simulator',
-      'iPad',
-      'iPhone',
-      'iPod'
-   ];
-
-   if (!!navigator.platform) {
-      while (iDevices.length) {
-         if (navigator.platform === iDevices.pop()) {
-            return true;
-         }
-      }
-   }
-
-   return false;
+   return iOS;
 }
