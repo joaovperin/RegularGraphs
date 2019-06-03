@@ -27,8 +27,7 @@ var ctx;
 
 // Current graph
 var graphRootNode;
-var graphValueArray;
-var currentValue;
+var valueField;
 
 /**
  * Runs when the browser loads
@@ -40,7 +39,7 @@ function appOnLoad() {
    ctx = canvas.getContext('2d');
    console.log(ctx);
 
-   const valueField = document.getElementById('value');
+   valueField = document.getElementById('value');
    valueField.addEventListener("keypress", function (evt) {
       var ch = String.fromCharCode(evt.which);
       let isNumber = /[0-9]/.test(ch);
@@ -49,9 +48,8 @@ function appOnLoad() {
       }
       return isNumber;
    });
-   valueField.addEventListener("keyup", (evt) => currentValue = evt.target.value || 0);
 
-   randomizeAndDraw();
+   // randomizeAndDraw();
 }
 
 /**
@@ -135,6 +133,11 @@ function generateRandomGraph(root) {
    generateRandomGraph(root.rightChild);
 }
 
+/**
+ * Return true if the vertex is invalid (out of canvas bounds)
+ * 
+ * @param {Vertex} root 
+ */
 function isVertexInvalid(root) {
    return (root.y + VertexRadius) >= CanvasHeight ||
       (root.x - VertexRadius) <= 0 ||
@@ -145,7 +148,6 @@ function isVertexInvalid(root) {
  * Clear the canvas
  */
 function clearCanvas() {
-   graphRootNode = null;
    ctx.fillStyle = CanvasColor;
    ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
@@ -256,8 +258,69 @@ class Vertex {
  * Adds a value on the graph
  */
 function addValueOnGraph() {
-   console.log('Value: ', value);
-   alert('Not implemented yet');
+   // If the graph does not exist yet, create it
+   if (!graphRootNode){
+      createNewGraph();
+   } else {
+      addValueOnExistingGraph();
+   }
+   clearCanvas();
+   drawGraph(graphRootNode);
+   document.getElementById('value').value = ''; 
+}
+
+/**
+ * Create a new graph
+ */
+function /*private*/ createNewGraph(){
+   // Gets initial X and Y for the center
+   let startX = CanvasWidth / 2,
+   startY = VertexInitialOffset + VertexRadius;
+   // Some randomness, just for fun (and tests) :D
+   graphRootNode = new Vertex(startX, startY, {
+      x: CanvasWidth,
+      y: CanvasHeight
+   });
+   graphRootNode.value = Number(valueField.value);
+}
+
+/**
+ * Add a value on the existing graph
+ */
+function /*private*/ addValueOnExistingGraph(){
+   let stack = [graphRootNode], 
+       currentValue = Number(valueField.value);
+   // Stack
+   while (stack.length){
+      let r = stack.pop(),
+          v = Number(r.value);
+      // If value already on the graph
+      if(v === currentValue){
+         let msg = 'Value already exists on the graph!';
+         console.error(msg);
+         alert(msg);
+         return;
+      }
+      // Traverse left
+      if (currentValue < v){
+         if(r.leftChild){
+            stack.push(r.leftChild);
+         } else {
+            r.leftChild = r.createLeftChild();
+            r.leftChild.value = currentValue;
+            console.debug('LEFT -> ', currentValue);
+         }
+      } else if (currentValue > v) {
+         // Traverse right
+         if (r.rightChild){
+            stack.push(r.rightChild);
+         } else {
+            r.rightChild = r.createRightChild();
+            r.rightChild.value = currentValue;
+            console.debug('RIGHT -> ', currentValue)
+         }
+      }
+   }
 }
 
 /**
