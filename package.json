@@ -7,9 +7,6 @@
   "private": false,
   "main": "main.js",
   "scripts": {
-    "start": "electron ./www"
-  },
-  "dependencies": {
-    "electron": "^5.0.2"
+    "start": "echo 'Please run the script'"
   }
 }
