@@ -262,3 +262,22 @@ function /* public */ onClickAddButton() {
 function /* public */ onClickClearButton() {
    clearCanvas();
 }
+
+/**
+ * Callback - fromArray button click
+ */
+function /* public */ onClickFromArrayButton() {
+   clearCanvas();
+   let answer = window.prompt("Input array:", "[5, 2, 3, 4, 1, 9 ,22, 15]");
+   console.debug(answer);
+   if (!/\[\s*\d+(\s*\,\s*\d+\s*)*\]/.test(answer)) {
+      let msg = 'Invalid Array!';
+      console.error(msg);
+      alert(msg);
+      return;
+   }
+   let arr = JSON.parse(answer);
+   console.debug(arr);
+   graphRootNode = null;
+   arr.forEach(e => addValueOnGraph(e));
+}
