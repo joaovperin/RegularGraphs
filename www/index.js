@@ -131,7 +131,6 @@ class Vertex {
     * Creates a child to the left
     */
    createLeftChild(value) {
-      debugger;   
       let min = Math.min(this.parentVertex.x, this.x),
           max = Math.max(this.parentVertex.x, this.x);
       let pX = this.x - (max - min) / 2 - VertexOffsetX,
