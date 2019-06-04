@@ -11,8 +11,8 @@ const VertexInitialOffset = 25;
 const VertexColor = '#000';
 const VertexFillColor = '#F00';
 
-const VertexFontSize = VertexRadius - VertexRadius / 10;
-const VertexFont = VertexFontSize + 'px Arial';
+const VertexFontSize = VertexRadius;
+const VertexFont = VertexFontSize + 'px Monaco';
 const VertexOffsetY = 15 + VertexRadius / 6;
 const VertexOffsetX = 5 + VertexRadius;
 
@@ -41,7 +41,7 @@ function appOnLoad() {
 
    valueField = document.getElementById('value');
    valueField.addEventListener("keypress", function (evt) {
-      if(evt && evt.charCode === 13){
+      if (evt && evt.charCode === 13) {
          addValueOnGraph();
          return false;
       }
@@ -56,8 +56,8 @@ function appOnLoad() {
 
 /**
  * Return true if the vertex is invalid (out of canvas bounds)
- * 
- * @param {Vertex} root 
+ *
+ * @param {Vertex} root
  */
 function isVertexInvalid(root) {
    return (root.y + VertexRadius) >= CanvasHeight ||
@@ -127,8 +127,8 @@ class Vertex {
       this.y = y;
       this.value = value;
       let vSize = this.value.toString().length;
-      this.valueOffsetX = VertexRadius / 7.5 + vSize * (VertexRadius / 6.5);
-      this.valueOffsetY = ((VertexRadius + 3) / 4);
+      this.valueOffsetX = VertexRadius / 7.5 + vSize * (VertexRadius / 7);
+      this.valueOffsetY = ((VertexRadius + 5) / 4);
    }
 
    /**
@@ -136,7 +136,7 @@ class Vertex {
     */
    createLeftChild(value) {
       let min = Math.min(this.parentVertex.x, this.x),
-          max = Math.max(this.parentVertex.x, this.x);
+         max = Math.max(this.parentVertex.x, this.x);
       let pX = this.x - (max - min) / 2 - VertexOffsetX,
          pY = this.y + VertexOffsetY + 2 * VertexRadius;
       return new Vertex(pX, pY, this, value);
@@ -147,7 +147,7 @@ class Vertex {
     */
    createRightChild(value) {
       let min = Math.min(this.parentVertex.x, this.x),
-          max = Math.max(this.parentVertex.x, this.x);
+         max = Math.max(this.parentVertex.x, this.x);
       let pX = this.x + (max - min) / 2 + VertexOffsetX,
          pY = this.y + VertexOffsetY + 2 * VertexRadius;
       return new Vertex(pX, pY, this, value);
@@ -183,27 +183,27 @@ class Vertex {
  * Adds a value on the graph
  */
 function addValueOnGraph() {
-   if (!document.getElementById('value').value){
+   if (!document.getElementById('value').value) {
       return;
    }
    // If the graph does not exist yet, create it
-   if (!graphRootNode){
+   if (!graphRootNode) {
       createNewGraph();
    } else {
       addValueOnExistingGraph();
    }
    clearCanvas();
    drawGraph(graphRootNode);
-   document.getElementById('value').value = ''; 
+   document.getElementById('value').value = '';
 }
 
 /**
  * Create a new graph
  */
-function /*private*/ createNewGraph(){
+function /*private*/ createNewGraph() {
    // Gets initial X and Y for the center
    let startX = CanvasWidth / 2,
-   startY = VertexInitialOffset + VertexRadius;
+      startY = VertexInitialOffset + VertexRadius;
    // Some randomness, just for fun (and tests) :D
    graphRootNode = new Vertex(startX, startY, {
       x: CanvasWidth,
@@ -215,23 +215,23 @@ function /*private*/ createNewGraph(){
 /**
  * Add a value on the existing graph
  */
-function /*private*/ addValueOnExistingGraph(){
-   let stack = [graphRootNode], 
-       currentValue = Number(valueField.value);
+function /*private*/ addValueOnExistingGraph() {
+   let stack = [graphRootNode],
+      currentValue = Number(valueField.value);
    // Stack
-   while (stack.length){
+   while (stack.length) {
       let r = stack.pop(),
-          v = Number(r.value);
+         v = Number(r.value);
       // If value already on the graph
-      if(v === currentValue){
+      if (v === currentValue) {
          let msg = 'Value already exists on the graph!';
          console.error(msg);
          alert(msg);
          return;
       }
       // Traverse left
-      if (currentValue < v){
-         if(r.leftChild){
+      if (currentValue < v) {
+         if (r.leftChild) {
             stack.push(r.leftChild);
          } else {
             r.leftChild = r.createLeftChild(currentValue);
@@ -239,7 +239,7 @@ function /*private*/ addValueOnExistingGraph(){
          }
       } else if (currentValue > v) {
          // Traverse right
-         if (r.rightChild){
+         if (r.rightChild) {
             stack.push(r.rightChild);
          } else {
             r.rightChild = r.createRightChild(currentValue);
