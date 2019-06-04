@@ -41,6 +41,10 @@ function appOnLoad() {
 
    valueField = document.getElementById('value');
    valueField.addEventListener("keypress", function (evt) {
+      if(evt && evt.charCode === 13){
+         addValueOnGraph();
+         return false;
+      }
       var ch = String.fromCharCode(evt.which);
       let isNumber = /[0-9]/.test(ch);
       if (!isNumber) {
@@ -179,6 +183,9 @@ class Vertex {
  * Adds a value on the graph
  */
 function addValueOnGraph() {
+   if (!document.getElementById('value').value){
+      return;
+   }
    // If the graph does not exist yet, create it
    if (!graphRootNode){
       createNewGraph();
