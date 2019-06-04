@@ -169,6 +169,8 @@ function /*private*/ addValueOnGraph(value) {
    }
    clearCanvas();
    drawGraph(graphRootNode);
+   let valueArray = iteratesTreeFromNode(graphRootNode);
+   console.log(valueArray);
 }
 
 /**
@@ -221,6 +223,32 @@ function /*private*/ addValueOnExistingGraph(value) {
          }
       }
    }
+}
+
+/**
+ * Processes a vertex and return it's value array
+ *
+ * @param {Vertex} node
+ */
+function iteratesTreeFromNode(node) {
+   // graphRootNode
+   let stack = [node],
+      valueArray = [];
+   let r = node;
+   while (r.leftChild) {
+      stack.push(r.leftChild);
+      r = r.leftChild;
+   }
+   // Stack
+   while (stack.length) {
+      r = stack.pop();
+      valueArray.push(r.value);
+      while (r.rightChild) {
+         valueArray.push(r.rightChild.value);
+         r = r.rightChild;
+      }
+   }
+   return valueArray;
 }
 
 /**
