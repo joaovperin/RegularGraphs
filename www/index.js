@@ -151,11 +151,11 @@ class Vertex {
       parentVertex; leftChild; rightChild; // relationships
    */
 
-   constructor(x, y, parentVertex) {
+   constructor(x, y, parentVertex, value) {
       this.parentVertex = parentVertex;
       this.x = x;
       this.y = y;
-      this.value = ~~(Math.random() * 100);
+      this.value = value;
       let vSize = this.value.toString().length;
       this.valueOffsetX = VertexRadius / 7.5 + vSize * (VertexRadius / 6.5);
       this.valueOffsetY = ((VertexRadius + 3) / 4);
@@ -164,19 +164,19 @@ class Vertex {
    /**
     * Creates a child to the left
     */
-   createLeftChild() {
+   createLeftChild(value) {
       let pX = this.x - (this.parentVertex.x - this.x) / 2 - VertexOffsetX,
          pY = this.y + VertexOffsetY + 2 * VertexRadius;
-      return new Vertex(pX, pY, this);
+      return new Vertex(pX, pY, this, value);
    }
 
    /**
     * Creates a child to the right
     */
-   createRightChild() {
+   createRightChild(value) {
       let pX = this.x + (this.parentVertex.x - this.x) / 2 + VertexOffsetX,
          pY = this.y + VertexOffsetY + 2 * VertexRadius;
-      return new Vertex(pX, pY, this);
+      return new Vertex(pX, pY, this, value);
    }
 
    /**
@@ -231,8 +231,7 @@ function /*private*/ createNewGraph(){
    graphRootNode = new Vertex(startX, startY, {
       x: CanvasWidth,
       y: CanvasHeight
-   });
-   graphRootNode.value = Number(valueField.value);
+   }, Number(valueField.value));
    console.debug('Root -> ', graphRootNode.value);
 }
 
@@ -258,8 +257,7 @@ function /*private*/ addValueOnExistingGraph(){
          if(r.leftChild){
             stack.push(r.leftChild);
          } else {
-            r.leftChild = r.createLeftChild();
-            r.leftChild.value = currentValue;
+            r.leftChild = r.createLeftChild(currentValue);
             console.debug('LEFT -> ', currentValue);
          }
       } else if (currentValue > v) {
@@ -267,8 +265,7 @@ function /*private*/ addValueOnExistingGraph(){
          if (r.rightChild){
             stack.push(r.rightChild);
          } else {
-            r.rightChild = r.createRightChild();
-            r.rightChild.value = currentValue;
+            r.rightChild = r.createRightChild(currentValue);
             console.debug('RIGHT -> ', currentValue);
          }
       }
