@@ -30,36 +30,11 @@ var graphRootNode;
 var valueField;
 
 /**
- * Runs when the browser loads
- */
-function appOnLoad() {
-
-   // Get a reference to canvas and context
-   canvas = document.getElementById('canvas');
-   ctx = canvas.getContext('2d');
-   console.log(ctx);
-
-   valueField = document.getElementById('value');
-   valueField.addEventListener("keypress", function (evt) {
-      if (evt && evt.charCode === 13) {
-         addValueOnGraph();
-         return false;
-      }
-      var ch = String.fromCharCode(evt.which);
-      let isNumber = /[0-9]/.test(ch);
-      if (!isNumber) {
-         evt.preventDefault();
-      }
-      return isNumber;
-   });
-}
-
-/**
  * Return true if the vertex is invalid (out of canvas bounds)
  *
  * @param {Vertex} root
  */
-function isVertexInvalid(root) {
+function /*private*/ isVertexInvalid(root) {
    return (root.y + VertexRadius) >= CanvasHeight ||
       (root.x - VertexRadius) <= 0 ||
       (root.x + VertexRadius) >= CanvasWidth;
@@ -68,7 +43,7 @@ function isVertexInvalid(root) {
 /**
  * Clear the canvas
  */
-function clearCanvas() {
+function /*private*/ clearCanvas() {
    ctx.fillStyle = CanvasColor;
    ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
@@ -78,7 +53,7 @@ function clearCanvas() {
  *
  * @param {Vertex} rootNode
  */
-function drawGraph(rootNode) {
+function /*private*/ drawGraph(rootNode) {
    let left = rootNode.leftChild,
       right = rootNode.rightChild;
    if (left) {
@@ -98,7 +73,7 @@ function drawGraph(rootNode) {
  * @param {Vertex} me
  * @param {Vertex} son
  */
-function drawEdge(me, son) {
+function /*private*/ drawEdge(me, son) {
    ctx.fillStyle = EdgeColor;
    ctx.lineWidth = EdgeWidth;
 
@@ -112,7 +87,7 @@ function drawEdge(me, son) {
 /**
  * A vertex
  */
-class Vertex {
+class /*private*/ Vertex {
 
    /*
       x; y;  // position
@@ -182,25 +157,24 @@ class Vertex {
 /**
  * Adds a value on the graph
  */
-function addValueOnGraph() {
-   if (!document.getElementById('value').value) {
+function /*private*/ addValueOnGraph(value) {
+   if (!value) {
       return;
    }
    // If the graph does not exist yet, create it
    if (!graphRootNode) {
-      createNewGraph();
+      createNewGraph(value);
    } else {
-      addValueOnExistingGraph();
+      addValueOnExistingGraph(value);
    }
    clearCanvas();
    drawGraph(graphRootNode);
-   document.getElementById('value').value = '';
 }
 
 /**
  * Create a new graph
  */
-function /*private*/ createNewGraph() {
+function /*private*/ createNewGraph(value) {
    // Gets initial X and Y for the center
    let startX = CanvasWidth / 2,
       startY = VertexInitialOffset + VertexRadius;
@@ -208,16 +182,16 @@ function /*private*/ createNewGraph() {
    graphRootNode = new Vertex(startX, startY, {
       x: CanvasWidth,
       y: CanvasHeight
-   }, Number(valueField.value));
+   }, Number(value));
    console.debug('Root -> ', graphRootNode.value);
 }
 
 /**
  * Add a value on the existing graph
  */
-function /*private*/ addValueOnExistingGraph() {
+function /*private*/ addValueOnExistingGraph(value) {
    let stack = [graphRootNode],
-      currentValue = Number(valueField.value);
+      currentValue = Number(value);
    // Stack
    while (stack.length) {
       let r = stack.pop(),
@@ -247,4 +221,44 @@ function /*private*/ addValueOnExistingGraph() {
          }
       }
    }
+}
+
+/**
+ * Runs when the browser loads
+ */
+function /*public*/ appOnLoad() {
+
+   // Get a reference to canvas and context
+   canvas = document.getElementById('canvas');
+   ctx = canvas.getContext('2d');
+   console.log(ctx);
+
+   valueField = document.getElementById('value');
+   valueField.addEventListener("keypress", function (evt) {
+      if (evt && evt.charCode === 13) {
+         addValueOnGraph(valueField.value);
+         return false;
+      }
+      var ch = String.fromCharCode(evt.which);
+      let isNumber = /[0-9]/.test(ch);
+      if (!isNumber) {
+         evt.preventDefault();
+      }
+      return isNumber;
+   });
+}
+
+/**
+ * Callback - add button click
+ */
+function /* public */ onClickAddButton() {
+   addValueOnGraph(valueField.value);
+   document.getElementById('value').value = '';
+}
+
+/**
+ * Callback - clear button click
+ */
+function /* public */ onClickClearButton() {
+   clearCanvas();
 }
